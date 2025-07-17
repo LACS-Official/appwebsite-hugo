@@ -55,7 +55,7 @@ image: "/images/vscode-banner.jpg"
 
 Visual Studio Code（简称VS Code）是由微软开发的一款免费、开源的现代化轻量级代码编辑器。它支持几乎所有主流的编程语言，并内置了对JavaScript、TypeScript和Node.js的支持，以及丰富的其他语言扩展生态系统。
 
-## 为什么选择VS Code？
+## 为什么选择VS Code
 
 VS Code已经成为全球开发者最受欢迎的代码编辑器之一，这里有几个你应该选择它的理由：
 
@@ -111,21 +111,6 @@ VS Code的扩展市场提供了数千个扩展，可以增强编辑器的功能�
 - `Ctrl+Space`：触发建议
 - `F12`：转到定义
 - `Alt+F12`：查看定义
-
-### 自定义设置
-
-VS Code提供了丰富的自定义选项，你可以通过`settings.json`文件来配置：
-
-```
-{
-  "editor.fontSize": 14,
-  "editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
-  "editor.wordWrap": "on",
-  "editor.minimap.enabled": true,
-  "workbench.colorTheme": "One Dark Pro",
-  "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe"
-}
-```
 
 ### 工作区和多项目管理
 
