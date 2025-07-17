@@ -1,0 +1,51 @@
+# 主导航菜单
+[[main]]
+name = "首页"
+url = "/"
+weight = 10
+identifier = "home"
+
+[[main]]
+name = "软件"
+url = "/software/"
+weight = 20
+identifier = "software"
+
+[[main]]
+name = "分类"
+url = "/categories/"
+weight = 30
+identifier = "categories"
+
+[[main]]
+name = "标签"
+url = "/tags/"
+weight = 40
+identifier = "tags"
+
+[[main]]
+name = "关于"
+url = "/about/"
+weight = 50
+identifier = "about"
+
+# 快速链接菜单
+[[quicklinks]]
+name = "软件下载"
+url = "/software/"
+weight = 10
+
+[[quicklinks]]
+name = "最新更新"
+url = "/tags/最新/"
+weight = 20
+
+[[quicklinks]]
+name = "热门推荐"
+url = "/tags/推荐/"
+weight = 30
+
+[[quicklinks]]
+name = "联系我们"
+url = "/contact/"
+weight = 40

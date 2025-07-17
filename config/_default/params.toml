@@ -1,0 +1,4 @@
+[umami]
+enable = true
+website_id = "99e40abd-3eaa-47a1-a6b4-84fc6831aa4e"
+script_url = "https://umami.lacs.cc/script.js" 

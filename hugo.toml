@@ -1,0 +1,74 @@
+baseURL = 'https://app.lacs.cc'
+languageCode = 'zh-cn'
+title = '软件资源'
+author_name = '领创工作室'
+theme = "software-resource-theme"
+
+[menu]
+  [[menu.main]]
+    name = "首页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "软件"
+    url = "/software/"
+    weight = 2
+  [[menu.main]]
+    name = "分类"
+    url = "/categories/"
+    weight = 3
+
+[params]
+  copyright = "© 2025 领创工作室. 保留所有权利。"
+  icp = "ICP-test"
+
+  [params.carousel]
+    images = [
+      { src = "https://img.lacs.cc/img/25-07/14/bg-lacs-group.webp", alt = "专业软件展示", width = 800, height = 450, loading = "lazy" },
+      { src = "https://img.lacs.cc/img/25-07/14/hout-lacs.webp", alt = "开发工具展示", width = 800, height = 450, loading = "lazy" },
+    ]
+
+  [[params.ads]]  
+    title = "推荐产品 1"
+    description = "发现更多优质软件和服务"
+    link = "#"
+    buttonText = "了解更多 1"
+
+  [[params.ads]]
+    title = "领创工作室官网"
+    description = "一起探索更多内容"
+    link = "https://lacs.cc/"
+    buttonText = "访问官网"
+
+[params.about]
+  mission = "提供专业软件资源与解决方案，帮助开发者和创意工作者提升工作效率。"
+  vision = "成为领先的软件资源平台，连接开发者与优质工具。"
+  
+  [[params.about.team]]
+    name = "张三"
+    position = "首席执行官"
+    image = "/images/team-ceo.svg"
+    bio = "拥有10年软件开发经验，专注于开源技术和开发者工具领域。"
+  
+  [[params.about.team]]
+    name = "李四"
+    position = "技术总监"
+    image = "/images/team-cto.svg"
+    bio = "前谷歌工程师，精通前端和后端技术，负责平台架构设计。"
+  
+  [[params.about.team]]
+    name = "王五"
+    position = "内容主管"
+    image = "/images/team-content.svg"
+    bio = "资深科技作家，擅长将复杂技术转化为易懂的内容。"
+  
+  [params.about.contact]
+    email = "contact@example.com"
+    wechat = "SoftwareResource"
+    qq_group = "123456789"
+    address = "北京市海淀区中关村科技园区"
+    phone = "010-12345678"
+staticDir = ["static"]
+
+[outputs]
+home = ["HTML", "JSON"]

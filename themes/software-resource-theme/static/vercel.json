@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    {
+      "source": "/admin/api/(.*)",
+      "destination": "/admin/api/$1.js"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/admin/$1"
+    }
+  ],
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}

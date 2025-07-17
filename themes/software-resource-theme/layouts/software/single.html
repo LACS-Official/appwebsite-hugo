@@ -1,0 +1,295 @@
+{{ define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+    <!-- 引入Markdown增强器 -->
+    {{ partial "markdown-enhancer.html" . }}
+    
+    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- 左侧内容区域 -->
+            <div class="lg:col-span-8 space-y-8">
+                <!-- 软件详情卡片 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+                    <!-- 软件封面图 -->
+                    <div class="relative aspect-video bg-blue-50">
+                        {{ if .Params.image }}
+                        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-full h-full object-cover opacity-98 hover:opacity-100 transition-opacity duration-300">
+                        {{ else }}
+                        <div class="flex items-center justify-center w-full h-full">
+                            <i class="fa-solid fa-cube text-blue-200 text-6xl opacity-40"></i>
+                        </div>
+                        {{ end }}
+                        <!-- 版本标签 -->
+                        <div class="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow">
+                            v{{ .Params.version }}
+                        </div>
+                    </div>
+                    
+                    <!-- 软件信息 -->
+                    <div class="p-6 sm:p-8">
+                        <div class="mb-6">
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 text-blue-900 hover:text-blue-600 transition-colors duration-300">
+                                {{ .Title }}
+                            </h1>
+                            <!-- 软件点击量展示 -->
+                            <div class="text-sm text-gray-500 mb-2">
+                                <i class="fa-solid fa-eye mr-1"></i>
+                                <span id="umami-views">加载中...</span>
+                            </div>
+                            <script>
+                            (function() {
+                                // 获取当前页面路径，去除域名
+                                var pagePath = window.location.pathname;
+                                fetch('https://api-g.lacs.cc/appweb/umami-pageviews?page=' + encodeURIComponent(pagePath))
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        // 兼容umami返回结构
+                                        var views = data.pageviews || (data.data && data.data.pageviews) || 0;
+                                        document.getElementById('umami-views').innerText = views + ' 次浏览';
+                                    })
+                                    .catch(() => {
+                                        document.getElementById('umami-views').innerText = '统计获取失败';
+                                    });
+                            })();
+                            </script>
+                            
+                            <!-- 软件元信息 -->
+                            <div class="flex flex-wrap items-center text-sm text-gray-500 mb-4 gap-y-2">
+                                <div class="flex items-center mr-4">
+                                    <i class="fa-solid fa-calendar-days mr-2 text-blue-300"></i>
+                                    <span>发布于 {{ .Date.Format "2006-01-02" }}</span>
+                                </div>
+                                <div class="flex items-center mr-4">
+                                    <i class="fa-solid fa-download mr-2 text-blue-300"></i>
+                                    <span>0 次下载</span>
+                                </div>
+                                {{ if .Params.size }}
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-hard-drive mr-2 text-blue-300"></i>
+                                    <span>{{ .Params.size }}</span>
+                                </div>
+                                {{ end }}
+                            </div>
+                            
+                            <!-- 分类和标签 -->
+                            <div class="flex flex-wrap gap-2">
+                                {{ range .Params.categories }}
+                                <a href="{{ $.Site.BaseURL }}/categories/{{ . | urlize }}/" class="bg-blue-50 text-blue-800 text-xs font-medium px-3 py-1 rounded-full hover:bg-blue-100 transition-colors duration-200 hover:shadow-sm">
+                                    <i class="fa-solid fa-folder-open mr-1"></i> {{ . }}
+                                </a>
+                                {{ end }}
+                                {{ range .Params.tags }}
+                                <a href="{{ $.Site.BaseURL }}/tags/{{ . | urlize }}/" class="bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1 rounded-full hover:bg-blue-100 transition-colors duration-200 hover:shadow-sm">
+                                    <i class="fa-solid fa-tag mr-1"></i> {{ . }}
+                                </a>
+                                {{ end }}
+                            </div>
+                        </div>
+                        
+                        <!-- 软件介绍 -->
+                        <div class="prose max-w-none">
+                            {{ .Content }}
+                        </div>
+                        
+                        <!-- 系统要求 -->
+                        {{ if .Params.system_requirements }}
+                        <div class="mt-8">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center text-blue-900 border-b pb-2">
+                                <i class="fa-solid fa-laptop text-blue-400 mr-2"></i> 系统要求
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {{ range $platform, $requirements := .Params.system_requirements }}
+                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                    <h3 class="text-lg font-bold mb-3 flex items-center">
+                                        {{ if eq $platform "Windows" }}
+                                        <i class="fa-brands fa-windows text-blue-400 mr-2"></i>
+                                        {{ else if eq $platform "macOS" }}
+                                        <i class="fa-brands fa-apple text-gray-800 mr-2"></i>
+                                        {{ else if eq $platform "Linux" }}
+                                        <i class="fa-brands fa-linux text-orange-400 mr-2"></i>
+                                        {{ else }}
+                                        <i class="fa-solid fa-desktop text-blue-200 mr-2"></i>
+                                        {{ end }}
+                                        {{ $platform }}
+                                    </h3>
+                                    <ul class="space-y-2 text-gray-700">
+                                        {{ range $requirements }}
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-circle-check text-blue-300 mt-1 mr-2"></i>
+                                            <span>{{ . }}</span>
+                                        </li>
+                                        {{ end }}
+                                    </ul>
+                                </div>
+                                {{ end }}
+                            </div>
+                        </div>
+                        {{ end }}
+                        
+                        <!-- 更新日志 -->
+                        {{ if .Params.changelog }}
+                        <div class="mt-8">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center text-blue-900 border-b pb-2">
+                                <i class="fa-solid fa-clock-rotate-left text-blue-400 mr-2"></i> 更新日志
+                            </h2>
+                            <div class="space-y-6 p-4 bg-blue-50 rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                <div class="border-l-4 border-blue-200 pl-4 py-1">
+                                    <h3 class="text-lg font-bold mb-2">版本 {{ .Params.version }}</h3>
+                                    <ul class="space-y-2 text-gray-700">
+                                        {{ range .Params.changelog }}
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-circle-dot text-blue-300 mt-1 mr-2"></i>
+                                            <span>{{ . }}</span>
+                                        </li>
+                                        {{ end }}
+                                    </ul>
+                                </div>
+                                
+                                {{ if .Params.previous_versions }}
+                                {{ range .Params.previous_versions }}
+                                <div class="border-l-4 border-gray-100 pl-4 py-1">
+                                    <h3 class="text-lg font-bold mb-2">版本 {{ .version }}</h3>
+                                    <ul class="space-y-2 text-gray-700">
+                                        {{ range .changes }}
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-circle-dot text-gray-200 mt-1 mr-2"></i>
+                                            <span>{{ . }}</span>
+                                        </li>
+                                        {{ end }}
+                                    </ul>
+                                </div>
+                                {{ end }}
+                                {{ end }}
+                            </div>
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧边栏 -->
+            <div class="lg:col-span-4 space-y-8">
+                <!-- 下载信息卡片 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fa-solid fa-download text-blue-400 mr-2"></i> 下载信息
+                        </h3>
+                        <div class="space-y-4 mb-6">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">当前版本</span>
+                                <span class="font-medium">{{ .Params.version }}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">文件大小</span>
+                                <span class="font-medium">{{ .Params.size }}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">更新日期</span>
+                                <span class="font-medium">{{ .Date.Format "2006-01-02" }}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">系统支持</span>
+                                <div class="flex flex-wrap gap-2">
+                                    {{ range .Params.platforms }}
+                                    <span class="bg-blue-50 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                        {{ . }}
+                                    </span>
+                                    {{ end }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 下载链接区域 -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {{ if .Params.downloads.official }}
+                            <a href="{{ .Params.downloads.official }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 justify-center umami-download" data-software="{{ .Title }}" data-type="official">
+                                <i class="fa-solid fa-globe mr-2"></i> 官方下载
+                            </a>
+                            {{ end }}
+                            {{ if .Params.downloads.quark }}
+                            <a href="{{ .Params.downloads.quark }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-200 text-blue-900 rounded-md hover:bg-blue-300 transition-colors duration-200 justify-center umami-download" data-software="{{ .Title }}" data-type="quark">
+                                夸克网盘
+                            </a>
+                            {{ end }}
+                            {{ if .Params.downloads.netdisk }}
+                            <a href="{{ .Params.downloads.netdisk }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-900 rounded-md hover:bg-blue-200 transition-colors duration-200 justify-center umami-download" data-software="{{ .Title }}" data-type="netdisk">
+                                123网盘
+                            </a>
+                            {{ end }}
+                            {{ if .Params.downloads.baidu }}
+                            <a href="{{ .Params.downloads.baidu }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-400 text-white rounded-md hover:bg-blue-500 transition-colors duration-200 justify-center umami-download" data-software="{{ .Title }}" data-type="baidu">
+                                百度网盘
+                            </a>
+                            {{ end }}
+                            {{ if .Params.downloads.thunder }}
+                            <a href="{{ .Params.downloads.thunder }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-900 rounded-md hover:bg-blue-100 transition-colors duration-200 justify-center umami-download" data-software="{{ .Title }}" data-type="thunder">
+                                迅雷下载
+                            </a>
+                            {{ end }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 广告卡片 -->
+                {{ $ads := site.Params.ads }}
+                {{ if $ads }}
+                {{ $randomIndex := (shuffle (seq (len $ads))) | first 1 }}
+                {{ range $index, $ad := $ads }}
+                {{ if in $randomIndex $index }}
+                <div class="bg-blue-50 rounded-xl shadow-md overflow-hidden text-blue-900 p-6 relative hover:shadow-lg transition-all duration-300">
+                    <div class="absolute top-2 right-2 text-xs bg-white/60 px-2 py-1 rounded-full backdrop-blur-sm">广告</div>
+                    <h3 class="text-xl font-bold mb-2">{{ $ad.title }}</h3>
+                    <p class="text-sm text-blue-800 mb-4">{{ $ad.description }}</p>
+                    <a href="{{ $ad.link }}" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-100 hover:bg-blue-200 text-blue-900 text-sm font-medium px-4 py-2 rounded-lg backdrop-blur-sm transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+                        {{ $ad.buttonText }}
+                    </a>
+                </div>
+                {{ end }}
+                {{ end }}
+                {{ end }}
+                
+                <!-- 相关软件 -->
+                {{ $currentTitle := .Title }}
+                {{ $relatedSoftware := where (where .Site.RegularPages "Section" "software") "Title" "ne" .Title }}
+                {{ if $relatedSoftware }}
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fa-solid fa-layer-group text-blue-400 mr-2"></i> 相关软件
+                        </h3>
+                        <div class="space-y-4">
+                            {{ range first 5 $relatedSoftware }}
+                            <a href="{{ .Permalink }}" class="block group">
+                                <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-all duration-200">
+                                    <div class="w-12 h-12 bg-blue-50 rounded-lg overflow-hidden flex-shrink-0">
+                                        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-grow min-w-0">
+                                        <h4 class="font-medium text-blue-900 truncate group-hover:text-blue-600 transition-colors duration-200">
+                                            {{ .Title }}
+                                        </h4>
+                                        <p class="text-xs text-gray-500 mt-1">v{{ .Params.version }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                            {{ end }}
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+                
+                <!-- 协议卡片 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <div class="text-center text-sm text-gray-500">
+                                <p>下载即表示您同意我们的<a href="#" class="text-blue-600 hover:underline">使用条款</a>和<a href="#" class="text-blue-600 hover:underline">隐私政策</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{ end }}

@@ -1,0 +1,121 @@
+{{ define "title" }}软件标签 - {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+    <div class="mb-8">
+        <div class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl shadow-lg p-8 text-white mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 flex items-center">
+                <i class="fa-solid fa-tags mr-3 text-white/80"></i>
+                软件标签
+            </h1>
+            <p class="text-white/80 text-lg">浏览所有软件标签，找到您感兴趣的软件资源</p>
+            <div class="mt-4 flex items-center">
+                <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                    共 {{ len .Site.Taxonomies.tags }} 个标签
+                </span>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="relative">
+                <input type="text" id="tag-search" placeholder="搜索标签..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+        </div>
+        
+        <!-- 标签云 -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fa-solid fa-cloud text-primary mr-2"></i>
+                标签云
+            </h2>
+            <div class="flex flex-wrap gap-3" id="tag-cloud">
+                {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+                <a href="{{ $.Site.BaseURL }}tags/{{ $name | urlize }}/" class="tag-item bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-lg transition-all duration-200 text-sm font-medium hover:shadow-sm" style="font-size: calc(0.8rem + {{ mul (div $taxonomy.Count 10.0) 0.5 }}rem);">
+                    {{ $name }} <span class="text-gray-500">({{ $taxonomy.Count }})</span>
+                </a>
+                {{ end }}
+            </div>
+        </div>
+        
+        <!-- 热门标签 -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fa-solid fa-fire text-primary mr-2"></i>
+                热门标签
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {{ range first 9 .Site.Taxonomies.tags.ByCount }}
+                <div class="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 group">
+                    <a href="{{ $.Site.BaseURL }}tags/{{ .Page.Title | urlize }}/" class="block">
+                        <h3 class="text-lg font-bold mb-2 group-hover:text-primary transition-colors duration-200">{{ .Page.Title }}</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">{{ .Count }} 款软件</span>
+                            <span class="text-primary text-sm">查看 <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                        </div>
+                    </a>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+        
+        <!-- 按字母分类的标签列表 -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fa-solid fa-list-ul text-primary mr-2"></i>
+                所有标签
+            </h2>
+            
+            <!-- 字母导航 -->
+            <div class="flex flex-wrap gap-2 mb-6 sticky top-0 bg-white py-2 z-10 border-b">
+                {{ range (slice "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "#") }}
+                <a href="#letter-{{ . }}" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors duration-200">
+                    {{ . }}
+                </a>
+                {{ end }}
+            </div>
+            
+            <!-- 标签列表 -->
+            <div class="space-y-6">
+                {{ range (slice "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "#") }}
+                {{ $letter := . }}
+                <div id="letter-{{ $letter }}" class="pt-2">
+                    <h3 class="text-xl font-bold mb-3 pb-2 border-b border-gray-200">{{ $letter }}</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {{ range $name, $taxonomy := $.Site.Taxonomies.tags }}
+                        {{ $firstChar := substr (upper $name) 0 1 }}
+                        {{ if eq $firstChar $letter }}
+                        <a href="{{ $.Site.BaseURL }}tags/{{ $name | urlize }}/" class="text-gray-700 hover:text-primary transition-colors duration-200 flex items-center">
+                            <i class="fa-solid fa-tag mr-2 text-gray-400"></i>
+                            {{ $name }} <span class="text-gray-500 ml-1">({{ $taxonomy.Count }})</span>
+                        </a>
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    
+    <!-- 标签搜索脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('tag-search');
+            const tagItems = document.querySelectorAll('.tag-item');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                tagItems.forEach(item => {
+                    const tagText = item.textContent.toLowerCase();
+                    if (tagText.includes(searchTerm)) {
+                        item.style.display = 'inline-block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+{{ end }}

@@ -1,0 +1,134 @@
+{{ define "title" }}{{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+<div class="container mx-auto px-2 md:px-6 py-6">
+  <!-- 大屏幕：左右两栏布局 -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- 左侧主内容区（轮播+原创+专业） -->
+    <div class="space-y-6 lg:col-span-2">
+      <!-- 轮播图 -->
+      <section class="relative rounded-xl overflow-hidden shadow-lg mb-4">
+        <div class="aspect-[21/9]">
+          <div class="swiper-container h-full">
+            <div class="swiper-wrapper">
+              {{ range first 5 (site.Params.carousel.images) }}
+              <div class="swiper-slide bg-blue-800">
+                <div class="h-full flex items-center justify-center">
+                  <img src="{{ .src }}" alt="{{ .alt }}" width="{{ .width }}" height="{{ .height }}" loading="{{ .loading }}" class="w-full h-full object-cover">
+                </div>
+              </div>
+              {{ end }}
+            </div>
+            <div class="swiper-pagination absolute bottom-4 left-0 right-0 flex justify-center gap-2"></div>
+            <div class="swiper-button-prev z-10"></div>
+            <div class="swiper-button-next z-10"></div>
+          </div>
+        </div>
+      </section>
+      <!-- 原创软件区块 -->
+      <section class="bg-white rounded-xl shadow-md p-5">
+        <div class="flex items-center mb-4">
+          <i class="fa-solid fa-pen-nib text-orange-500 text-xl mr-2"></i>
+          <h2 class="text-xl font-bold text-gray-800">原创软件</h2>
+          <span class="ml-2 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">官方认证</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {{ range first 3 (where (where .Site.RegularPages "Section" "software") "Params.original" true) }}
+          <div class="bg-orange-50 rounded-lg p-3 flex flex-col items-start">
+            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-full h-24 object-cover rounded mb-2">
+            <h3 class="font-bold text-sm mb-1 text-orange-700">{{ .Title }}</h3>
+            <p class="text-xs text-gray-600 mb-1 line-clamp-2">{{ .Params.brief }}</p>
+            <a href="{{ .Permalink }}" class="text-xs text-orange-500 hover:underline mt-auto">详情</a>
+          </div>
+          {{ end }}
+        </div>
+      </section>
+      <!-- 大学专业软件区块 -->
+      <section class="bg-white rounded-xl shadow-md p-5">
+        <div class="flex items-center mb-4">
+          <i class="fa-solid fa-university text-blue-500 text-xl mr-2"></i>
+          <h2 class="text-xl font-bold text-gray-800">大学专业软件</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {{ range first 3 (where .Site.RegularPages "Section" "software") }}
+          <div class="bg-blue-50 rounded-lg p-3 flex flex-col items-start">
+            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-full h-24 object-cover rounded mb-2">
+            <h3 class="font-bold text-sm mb-1 text-blue-800">{{ .Title }}</h3>
+            <p class="text-xs text-gray-600 mb-1 line-clamp-2">{{ .Params.brief }}</p>
+            <a href="{{ .Permalink }}" class="text-xs text-blue-500 hover:underline mt-auto">详情</a>
+          </div>
+          {{ end }}
+        </div>
+      </section>
+    </div>
+    <!-- 右侧区块（最热+最新） -->
+    <div class="space-y-6">
+      <!-- 最热软件 -->
+      <section class="bg-white rounded-xl shadow-md p-5">
+        <div class="flex items-center mb-4">
+          <i class="fa-solid fa-fire text-orange-500 text-xl mr-2"></i>
+          <h2 class="text-xl font-bold text-orange-700">最热软件</h2>
+        </div>
+        <div class="space-y-3">
+          {{ range first 5 (where .Site.RegularPages "Section" "software") }}
+          <div class="flex items-center py-2 border-b last:border-b-0">
+            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-10 h-10 object-cover rounded mr-2">
+            <a href="{{ .Permalink }}" class="hover:text-orange-600 transition-colors duration-200 text-sm font-bold">{{ .Title }}</a>
+          </div>
+          {{ end }}
+        </div>
+      </section>
+      <!-- 最新软件 -->
+      <section class="bg-white rounded-xl shadow-md p-5">
+        <div class="flex items-center mb-4">
+          <i class="fa-solid fa-clock-rotate-left text-blue-500 text-xl mr-2"></i>
+          <h2 class="text-xl font-bold text-blue-800">最新软件</h2>
+        </div>
+        <div class="space-y-3">
+          {{ range first 5 (where .Site.RegularPages "Section" "software") }}
+          <div class="flex items-center py-2 border-b last:border-b-0">
+            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-10 h-10 object-cover rounded mr-2">
+            <a href="{{ .Permalink }}" class="hover:text-blue-600 transition-colors duration-200 text-sm font-bold">{{ .Title }}</a>
+          </div>
+          {{ end }}
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- 全部软件列表 -->
+  <section class="mt-8 bg-white rounded-xl shadow-md p-6">
+    <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+      <i class="fa-solid fa-list text-primary mr-2"></i>全部软件列表
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {{ range (where .Site.RegularPages "Section" "software") }}
+      <div class="bg-gray-50 rounded-lg p-4 flex flex-col items-start hover:shadow-md transition-shadow duration-300">
+        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-full h-24 object-cover rounded mb-2">
+        <h3 class="font-bold text-sm mb-1 text-gray-800">{{ .Title }}</h3>
+        <p class="text-xs text-gray-600 mb-1 line-clamp-2">{{ .Params.brief }}</p>
+        <a href="{{ .Permalink }}" class="text-xs text-primary hover:underline mt-auto">详情</a>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  new Swiper('.swiper-container', {
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    loop: true
+  });
+});
+</script>
+{{ end }}

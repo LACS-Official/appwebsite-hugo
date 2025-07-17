@@ -1,0 +1,81 @@
+{{ define "title" }}软件分类 - {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+    <div class="mb-8">
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-8 text-white mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 flex items-center">
+                <i class="fa-solid fa-folder-tree mr-3 text-white/80"></i>
+                软件分类
+            </h1>
+            <p class="text-white/80 text-lg">浏览所有软件分类，找到您需要的软件资源</p>
+            <div class="mt-4 flex items-center">
+                <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                    共 {{ len .Site.Taxonomies.categories }} 个分类
+                </span>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="relative">
+                <input type="text" placeholder="搜索分类..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+        </div>
+        
+        <!-- 分类列表 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 group relative">
+                <a href="{{ $.Site.BaseURL }}categories/{{ $name | urlize }}/" class="absolute inset-0 z-10"></a>
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold group-hover:text-primary transition-colors duration-200 flex items-center">
+                            <i class="fa-solid fa-folder mr-2 text-primary"></i>
+                            {{ $name }}
+                        </h2>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            {{ $taxonomy.Count }} 款软件
+                        </span>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="flex flex-wrap gap-2">
+                            {{ range first 5 $taxonomy.Pages }}
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">{{ .Title }}</span>
+                            {{ end }}
+                            {{ if gt (len $taxonomy.Pages) 5 }}
+                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">...</span>
+                            {{ end }}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-between items-center">
+                        <div class="text-sm text-gray-500">
+                            最近更新: {{ (index $taxonomy.Pages 0).Date.Format "2006-01-02" }}
+                        </div>
+                        <a href="{{ $.Site.BaseURL }}categories/{{ $name | urlize }}/" class="text-primary hover:underline text-sm font-medium flex items-center relative z-20">
+                            查看全部 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {{ end }}
+        </div>
+        
+        <!-- 热门标签 -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fa-solid fa-tags text-primary mr-2"></i>
+                热门标签
+            </h2>
+            <div class="flex flex-wrap gap-2">
+                {{ range first 20 .Site.Taxonomies.tags.ByCount }}
+                <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/" class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full transition-colors duration-200">
+                    {{ .Name }} ({{ .Count }})
+                </a>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+{{ end }}

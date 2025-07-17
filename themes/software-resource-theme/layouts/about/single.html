@@ -1,0 +1,172 @@
+{{ define "title" }}关于我们 - {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+    <!-- 引入Markdown增强器 -->
+    {{ partial "markdown-enhancer.html" . }}
+    
+    <div class="mb-8">
+        <!-- 页面头部 -->
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-8 text-white mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 flex items-center">
+                <i class="fa-solid fa-circle-info mr-3 text-white/80"></i>
+                关于我们
+            </h1>
+            <p class="text-white/80 text-lg">了解我们的使命、价值观和团队</p>
+        </div>
+        
+        <!-- 主要内容 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <!-- 使命愿景部分 -->
+            <div class="p-8 border-b border-gray-100">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="md:w-1/2">
+                        <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                            <i class="fa-solid fa-bullseye text-primary mr-2"></i> 我们的使命
+                        </h2>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            {{ .Site.Params.about.mission }}
+                        </p>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            <strong>愿景：</strong>{{ .Site.Params.about.vision }}
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-start">
+                                <i class="fa-solid fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">精选高质量开发工具推荐</span>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fa-solid fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">持续更新最新技术资讯</span>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fa-solid fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">提供实用软件使用指南</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="/images/about-illustration.svg" alt="团队协作插画" class="rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 max-w-full h-auto">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 我们的特色 -->
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+                    <i class="fa-solid fa-star text-primary mr-2"></i> 我们的特色
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-xl hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-check text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-gray-800">精选软件</h3>
+                        <p class="text-gray-600">我们精心挑选每一款软件，确保其质量和安全性</p>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-6 rounded-xl hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-book-open text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-gray-800">详细介绍</h3>
+                        <p class="text-gray-600">提供软件的详细介绍、功能特点和使用方法</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-6 rounded-xl hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-comments text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-gray-800">用户评价</h3>
+                        <p class="text-gray-600">真实的用户评价和评分系统</p>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-6 rounded-xl hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-shield-alt text-orange-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-gray-800">安全下载</h3>
+                        <p class="text-gray-600">所有软件经过安全检测，确保无病毒和恶意代码</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Markdown 内容 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <div class="p-8">
+                <div class="prose max-w-none markdown-enhanced">
+                    {{ .Content }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- 联系我们 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+                    <i class="fa-solid fa-envelope text-primary mr-2"></i> 联系我们
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div class="bg-gray-50 p-6 rounded-xl hover:shadow-md transition-all duration-300">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fa-solid fa-map-marker-alt text-primary"></i>
+                    </div>
+                    <h3 class="text-lg font-bold">地址</h3>
+                </div>
+                <p class="text-gray-600 mb-2">我们的办公地点</p>
+                <span class="text-gray-800 font-medium">{{ .Site.Params.about.contact.address }}</span>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-xl hover:shadow-md transition-all duration-300">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fa-solid fa-phone text-primary"></i>
+                    </div>
+                    <h3 class="text-lg font-bold">电话</h3>
+                </div>
+                <p class="text-gray-600 mb-2">工作日 9:00-18:00</p>
+                <span class="text-gray-800 font-medium">{{ .Site.Params.about.contact.phone }}</span>
+            </div>
+                    <div class="bg-gray-50 p-6 rounded-xl hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-envelope text-primary"></i>
+                            </div>
+                            <h3 class="text-lg font-bold">电子邮件</h3>
+                        </div>
+                        <p class="text-gray-600 mb-2">有任何问题或建议？</p>
+                        <a href="mailto:{{ .Site.Params.about.contact.email }}" class="text-primary hover:underline">{{ .Site.Params.about.contact.email }}</a>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                                <i class="fa-brands fa-weixin text-primary"></i>
+                            </div>
+                            <h3 class="text-lg font-bold">微信</h3>
+                        </div>
+                        <p class="text-gray-600 mb-2">关注我们的公众号</p>
+                        <span class="text-gray-800 font-medium">{{ .Site.Params.about.contact.wechat }}</span>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                                <i class="fa-brands fa-qq text-primary"></i>
+                            </div>
+                            <h3 class="text-lg font-bold">QQ群</h3>
+                        </div>
+                        <p class="text-gray-600 mb-2">加入我们的交流群</p>
+                        <span class="text-gray-800 font-medium">{{ .Site.Params.about.contact.qq_group }}</span>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <a href="/contact" class="btn-primary inline-flex items-center">
+                        <i class="fa-solid fa-paper-plane mr-2"></i> 联系我们
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{ end }}
